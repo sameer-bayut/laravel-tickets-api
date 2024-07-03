@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\TicketResource;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use StoreTicketRequest;
 
-class TicketController extends Controller
+class TicketController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -39,6 +38,10 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
+        if($this->include('author')){
+            return new TicketResource($ticket->load('user'));
+        }
+
         return new TicketResource($ticket);
     }
 
