@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Http\Filters\V1\TicketFilter;
 use App\Http\Resources\V1\TicketResource;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
@@ -12,9 +13,9 @@ class TicketController extends ApiController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(TicketFilter $filters)
     {
-        return TicketResource::collection(Ticket::paginate());
+        return TicketResource::collection(Ticket::filter($filters)->paginate());
     }
 
     /**
@@ -22,7 +23,7 @@ class TicketController extends ApiController
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -30,7 +31,7 @@ class TicketController extends ApiController
      */
     public function store(StoreTicketRequest $request)
     {
-        //
+
     }
 
     /**
@@ -39,7 +40,7 @@ class TicketController extends ApiController
     public function show(Ticket $ticket)
     {
         if($this->include('author')){
-            return new TicketResource($ticket->load('user'));
+            return new TicketResource($ticket->load('author'));
         }
 
         return new TicketResource($ticket);
